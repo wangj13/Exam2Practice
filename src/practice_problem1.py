@@ -5,8 +5,8 @@ This problem provides practice at:
   ***  IMPLEMENTING CLASSES.  ***
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Jixi Wang.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 ########################################################################
 # Students:
@@ -39,15 +39,15 @@ def main():
     # UN-comment tests as you work the problems.
     ####################################################################
 
-#     run_test_init()
-#     run_test_append_string()
-#     run_test_double()
-#     run_test_shrink()
-#     run_test_double_then_shrink()
-#     run_test_reset()
-#     run_test_steal()
-#     run_test_get_history()
-#     run_test_combined_box()
+    run_test_init()
+    run_test_append_string()
+    run_test_double()
+    run_test_shrink()
+    run_test_double_then_shrink()
+    run_test_reset()
+    run_test_steal()
+    run_test_get_history()
+    run_test_combined_box()
 
 
 ########################################################################
@@ -93,8 +93,19 @@ class Box(object):
           :type contents: str
           :type volume: int
         """
+        if len(contents) <= volume:
+            self.contents = contents
+            self.volume = volume
+        else:
+            self.volume = volume
+            self.contents = ''
+        self.s = ''
+        self.contentsstart = self.contents
+        self.volumestart = self.volume
+        self.contentspast = []
+        self.pastcount = 0
         # --------------------------------------------------------------
-        # TODO: 2. Implement and test this function.
+        # DONE: 2. Implement and test this function.
         #     See the testing code (below) for more examples.
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -134,8 +145,17 @@ class Box(object):
         Type hints:
           :type additional_contents: str
         """
+        space = self.volume - len(self.contents)
+        for k in range(min(space, len(additional_contents)),
+                       len(additional_contents)):
+            self.s = self.s + additional_contents[k]
+
+        wjx = min(space, len(additional_contents))
+        for k in range(wjx):
+            self.contents = self.contents + additional_contents[k]
+        return self.s
         # --------------------------------------------------------------
-        # TODO: 3. Implement and test this function.
+        # DONE: 3. Implement and test this function.
         #     See the testing code (below) for more examples.
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -190,8 +210,10 @@ class Box(object):
           #   s is 'Robot Fun'   [this is the part of the doubled
           #                       contents that did NOT fit]
         """
+        self.append_string(self.contents)
+        return self.s
         # --------------------------------------------------------------
-        # TODO: 4. Implement and test this function.
+        # DONE: 4. Implement and test this function.
         #     The testing code is already written for you (above).
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -239,8 +261,21 @@ class Box(object):
         Type hints:
           :type new_volume: int
         """
+        self.volume = new_volume
+        space = self.volume - len(self.contents)
+        # print(space)
+        # print(len(self.contents))
+        newstring = ''
+        for k in range(min(self.volume, len(self.contents))):
+            newstring = newstring + self.contents[k]
+        self.s = ''
+        for k in range(-space):
+            self.s = self.s + self.contents[k + space]
+
+        self.contents = newstring
+        return self.s
         # --------------------------------------------------------------
-        # TODO: 5. Implement and test this function.
+        # DONE: 5. Implement and test this function.
         #     The testing code is already written for you (above).
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -295,8 +330,11 @@ class Box(object):
         Type hints:
           :type new_volume: int
         """
+        n = len(self.double())
+        n = n + len(self.shrink(new_volume))
+        return n
         # --------------------------------------------------------------
-        # TODO: 6. Implement and test this function.
+        # DONE: 6. Implement and test this function.
         #     The testing code is already written for you (above).
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -314,8 +352,14 @@ class Box(object):
           Changes this Box's contents and volume to whatever they were
           when this Box was constructed.
         """
+        content = self.contents
+        self.contentspast.insert(self.pastcount, content)
+        self.pastcount = self.pastcount + 1
+        self.contents = self.contentsstart
+        self.volume = self.volumestart
+
         # --------------------------------------------------------------
-        # TODO: 7. Implement and test this function.
+        # DONE: 7. Implement and test this function.
         #     The testing code is already written for you (above).
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -342,8 +386,11 @@ class Box(object):
         Type hints:
           :type other_box: Box
         """
+        n = self.append_string(other_box.contents)
+        other_box.contents = n
+
         # --------------------------------------------------------------
-        # TODO: 8. Implement and test this function.
+        # DONE: 8. Implement and test this function.
         #     The testing code is already written for you (above).
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -385,8 +432,12 @@ class Box(object):
           h = b.get_history()
           #   h is now ['GoodGo', 'GoodBye']
         """
+        if self.contentspast == []:
+            return []
+        else:
+            return self.contentspast
         # --------------------------------------------------------------
-        # TODO: 9. Implement and test this function.
+        # DONE: 9. Implement and test this function.
         #     The testing code is already written for you (above).
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -411,8 +462,11 @@ class Box(object):
         Type hints:
           :type other_box: Box
         """
+        contents = self.contents + other_box.contents
+        volume = self.volume + other_box.volume
+        return (Box(contents, volume))
         # --------------------------------------------------------------
-        # TODO: 10. Implement and test this function.
+        # DONE: 10. Implement and test this function.
         #     The testing code is already written for you (above).
         # --------------------------------------------------------------
         # --------------------------------------------------------------
